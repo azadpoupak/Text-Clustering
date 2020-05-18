@@ -103,16 +103,16 @@ fig, ax = plt.subplots(figsize=(15, 20))
 ax = dendrogram(linkage_matrix, orientation="right", labels=onlyfiles)
 
 plt.tick_params(\
-    axis= 'x',          # changes apply to the x-axis
-    which='both',      # both major and minor ticks are affected
-    bottom='off',      # ticks along the bottom edge are off
-    top='off',         # ticks along the top edge are off
+    axis= 'x',
+    which='both',
+    bottom='off',
+    top='off',
     labelbottom='off')
 
-plt.tight_layout() #show plot with tight layout
+plt.tight_layout()
 
 
-plt.savefig('ward_clusters.png', dpi=200) #save figure as ward_clusters
+plt.savefig('ward_clusters.png', dpi=200)
 
 
 frame = pd.DataFrame(linkage_matrix,index = onlyfiles[1:])
