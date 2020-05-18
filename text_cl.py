@@ -29,10 +29,8 @@ from nltk.stem.snowball import SnowballStemmer
 stemmer = SnowballStemmer("english")
 
 def tokenize_and_stem(text):
-    # first tokenize by sentence, then by word to ensure that punctuation is caught as it's own token
     tokens = [word for sent in nltk.sent_tokenize(text) for word in nltk.word_tokenize(sent)]
     filtered_tokens = []
-    # filter out any tokens not containing letters (e.g., numeric tokens, raw punctuation)
     for token in tokens:
         if re.search('[a-zA-Z]', token):
             filtered_tokens.append(token)
@@ -41,10 +39,8 @@ def tokenize_and_stem(text):
 
 
 def tokenize_only(text):
-    # first tokenize by sentence, then by word to ensure that punctuation is caught as it's own token
     tokens = [word.lower() for sent in nltk.sent_tokenize(text) for word in nltk.word_tokenize(sent)]
     filtered_tokens = []
-    # filter out any tokens not containing letters (e.g., numeric tokens, raw punctuation)
     for token in tokens:
         if re.search('[a-zA-Z]', token):
             filtered_tokens.append(token)
@@ -53,8 +49,8 @@ def tokenize_only(text):
 totalvocab_stemmed = []
 totalvocab_tokenized = []
 for i in texts:
-    allwords_stemmed = tokenize_and_stem(i) #for each item in 'synopses', tokenize/stem
-    totalvocab_stemmed.extend(allwords_stemmed) #extend the 'totalvocab_stemmed' list
+    allwords_stemmed = tokenize_and_stem(i) 
+    totalvocab_stemmed.extend(allwords_stemmed) 
     
     allwords_tokenized = tokenize_only(i)
     totalvocab_tokenized.extend(allwords_tokenized)
@@ -66,7 +62,6 @@ vocab_frame = pd.DataFrame({'words': totalvocab_tokenized}, index = totalvocab_s
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-#define vectorizer parameters
 tfidf_vectorizer = TfidfVectorizer(max_df=0.8, max_features=200000,
                                  min_df=0.2, stop_words='english',
                                  use_idf=True, tokenizer=tokenize_and_stem, ngram_range=(1,3))
@@ -92,19 +87,19 @@ fig, ax = plt.subplots(
         figsize=(figure_height,figure_height), 
         gridspec_kw=dict(top=1-top_margin, bottom=bottom_margin))
 
-# let seaborn do it's thing
+
 ax = sns.heatmap(dist_frame, ax=ax)
 
-# save the figure
+
 plt.savefig('test.png')
 
 #Hierarchal Clustering
 from scipy.cluster.hierarchy import ward,dendrogram
 
-linkage_matrix = ward(dist) #define the linkage_matrix using ward clustering pre-computed distances
+linkage_matrix = ward(dist)
 
 
-fig, ax = plt.subplots(figsize=(15, 20)) # set size
+fig, ax = plt.subplots(figsize=(15, 20)) 
 ax = dendrogram(linkage_matrix, orientation="right", labels=onlyfiles)
 
 plt.tick_params(\
@@ -116,7 +111,7 @@ plt.tick_params(\
 
 plt.tight_layout() #show plot with tight layout
 
-#save figure
+
 plt.savefig('ward_clusters.png', dpi=200) #save figure as ward_clusters
 
 
